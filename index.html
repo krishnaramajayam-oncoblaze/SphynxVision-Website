@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SphynxVision | Preclinical Imaging</title>
+
+    <!-- Google Tag Manager disabled for now. Re-enable if managing analytics through GTM later.
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MRZPLHFM');</script>
+    End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9WP2BB8KFX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-9WP2BB8KFX');
+    </script>
+
+    <style>
+        :root {
+            --bg: #03080d;
+            --panel: #081720;
+            --panel-2: #0d202b;
+            --text: #f5fbfb;
+            --muted: #a9bac0;
+            --cyan: #4fd5dd;
+            --green: #72d78b;
+            --red: #ff5d73;
+            --border: rgba(255,255,255,0.13);
+            --shadow: 0 24px 70px rgba(0,0,0,0.55);
+            --max-width: 1180px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 10% 8%, rgba(79,213,221,0.13), transparent 25%),
+                radial-gradient(circle at 88% 6%, rgba(114,215,139,0.12), transparent 28%),
+                var(--bg);
+            color: var(--text);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px clamp(18px, 6vw, 78px);
+            background: #4a505a;
+            backdrop-filter: none;
+            border-bottom: none;
+            box-shadow: none;
+        }
+
+
+        .logo {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            background: transparent;
+        }
+
+        .logo img {
+            height: 78px;
+            width: auto;
+            display: block;
+            background: transparent;
+            filter: none;
+        }
+
+        .logo-subtitle {
+            margin-top: -8px;
+            display: inline-block;
+            font-size: clamp(0.58rem, 0.95vw, 0.78rem);
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            line-height: 1;
+            color: #ffffff;
+            text-shadow: none;
+            white-space: nowrap;
+        }
+
+        .logo-subtitle:hover {
+            color: var(--cyan);
+        }
+
+        .logo-subtitle sup {
+            font-size: 0.48em;
+            vertical-align: super;
+            margin-left: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 20px;
+            border-radius: 999px;
+            font-weight: 800;
+            border: 1px solid var(--border);
+            transition: 0.2s ease;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn.primary,
+        button.btn {
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            color: #031018;
+            border: none;
+            box-shadow: 0 12px 36px rgba(79,213,221,0.2);
+        }
+
+        .btn.secondary {
+            background: rgba(255,255,255,0.04);
+            color: var(--text);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        [data-open-testimonials-modal] {
+            display: none;
+        }
+
+        .beta-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(3,8,13,0.76);
+            backdrop-filter: blur(10px);
+        }
+
+        .beta-modal.is-open {
+            display: flex;
+        }
+
+        .beta-modal-panel {
+            position: relative;
+            width: min(680px, 100%);
+            max-height: min(86vh, 720px);
+            overflow-y: auto;
+            border: 1px solid rgba(79,213,221,0.28);
+            border-radius: 28px;
+            padding: clamp(28px, 5vw, 46px);
+            background:
+                radial-gradient(circle at 20% 0%, rgba(79,213,221,0.16), transparent 34%),
+                linear-gradient(145deg, rgba(79,213,221,0.11), rgba(114,215,139,0.07), var(--panel));
+            box-shadow: var(--shadow);
+        }
+
+        .beta-modal-panel h2 {
+            font-size: clamp(2rem, 4vw, 3.35rem);
+            margin-right: 42px;
+        }
+
+        .beta-modal-panel h3 {
+            margin: 26px 0 10px;
+            font-size: 1.15rem;
+        }
+
+        .beta-modal-panel ul,
+        .beta-modal-panel ol {
+            margin: 0 0 24px;
+            padding-left: 20px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .beta-access-form button {
+            margin-top: 4px;
+        }
+
+        .testimonial-list {
+            display: grid;
+            gap: 18px;
+            margin-top: 24px;
+        }
+
+        .testimonial-card {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .testimonial-card p {
+            margin: 0 0 12px;
+        }
+
+        .testimonial-card strong {
+            color: var(--text);
+        }
+
+        .beta-modal-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .beta-modal-close:hover {
+            border-color: rgba(79,213,221,0.55);
+            color: var(--cyan);
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        section {
+            padding: 88px clamp(20px, 7vw, 96px);
+        }
+
+        .section-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .section-head {
+            max-width: 850px;
+            margin-bottom: 42px;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 0.78rem;
+            font-weight: 900;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 7vw, 6.25rem);
+            line-height: 0.95;
+            letter-spacing: -0.065em;
+            margin: 0 0 24px;
+        }
+
+        h2 {
+            font-size: clamp(2.15rem, 4vw, 4rem);
+            line-height: 1;
+            letter-spacing: -0.052em;
+            margin: 0 0 16px;
+        }
+
+        h3 {
+            letter-spacing: -0.025em;
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .gradient-text {
+            background: linear-gradient(120deg, #ffffff 8%, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 84vh;
+            display: grid;
+            grid-template-columns: 1.02fr 0.98fr;
+            align-items: center;
+            gap: 58px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding-top: 74px;
+        }
+
+        .hero p {
+            font-size: 1.24rem;
+            max-width: 650px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            margin-top: 34px;
+            flex-wrap: wrap;
+        }
+
+        .product-visual {
+            border-radius: 32px;
+            padding: 18px;
+            background:
+                radial-gradient(circle at top, rgba(79,213,221,0.18), transparent 36%),
+                linear-gradient(145deg, rgba(79,213,221,0.12), rgba(114,215,139,0.07), var(--panel));
+            border: 1px solid rgba(79,213,221,0.24);
+            box-shadow: var(--shadow);
+        }
+
+        .product-visual img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 22px;
+            background: transparent;
+        }
+
+        /* PROBLEM / SOLUTION */
+        .split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .panel {
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(255,255,255,0.035), var(--panel));
+            border-radius: 28px;
+            padding: 34px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel.highlight {
+            background: linear-gradient(145deg, rgba(79,213,221,0.12), rgba(114,215,139,0.09), var(--panel));
+            border-color: rgba(79,213,221,0.32);
+        }
+
+        .panel ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            display: grid;
+            gap: 14px;
+        }
+
+        .panel li {
+            color: var(--muted);
+            line-height: 1.45;
+            display: flex;
+            gap: 10px;
+        }
+
+        .good {
+            color: var(--green);
+            font-weight: 900;
+        }
+
+        .bad {
+            color: var(--red);
+            font-weight: 900;
+        }
+
+        .paired-comparison {
+            display: grid;
+            gap: 16px;
+        }
+
+        .paired-comparison-head,
+        .paired-comparison-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .paired-comparison-head {
+            color: var(--text);
+            font-weight: 900;
+            font-size: 1.05rem;
+        }
+
+        .paired-comparison-cell {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.035), var(--panel));
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .paired-comparison-cell.solution {
+            border-color: rgba(79,213,221,0.32);
+            background: linear-gradient(145deg, rgba(79,213,221,0.12), rgba(114,215,139,0.09), var(--panel));
+        }
+
+        /* VISUAL COMPARISON */
+        .comparison-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .comparison-image-card {
+            border-radius: 28px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            background: radial-gradient(circle at top, rgba(79,213,221,0.13), transparent 35%), var(--panel);
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-rows: minmax(0, 315px) auto;
+            gap: 16px;
+            min-height: 410px;
+        }
+
+        .comparison-image-card img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 18px;
+            background: transparent;
+            object-fit: cover;
+            object-position: center;
+            cursor: zoom-in;
+            transition: transform 0.18s ease;
+            transform-origin: center;
+        }
+
+        .comparison-image-card h3 {
+            margin: 0 8px 4px;
+            font-size: 1.18rem;
+            align-self: start;
+        }
+
+        /* CORE PLATFORM */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature {
+            padding: 28px;
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), var(--panel-2));
+            border: 1px solid var(--border);
+            min-height: 190px;
+            box-shadow: var(--shadow);
+        }
+
+        .feature h3 {
+            font-size: clamp(1rem, 1.12vw, 1.12rem);
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 18px;
+        }
+
+        /* WORKFLOW */
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .step {
+            padding: 30px 28px;
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(47,123,255,0.11), var(--panel));
+            border: 1px solid rgba(79,213,221,0.18);
+            min-height: 260px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .step-heading {
+            display: grid;
+            grid-template-columns: 1fr;
+            column-gap: 16px;
+            align-items: start;
+            margin-bottom: 22px;
+        }
+
+        .step-number {
+            color: var(--cyan);
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: 0.08em;
+            line-height: 1.25;
+            padding-top: 2px;
+        }
+
+        .step h3 {
+            margin: 0;
+            font-size: clamp(1rem, 1.2vw, 1.18rem);
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .step p {
+            margin: 0;
+            font-size: 1.02rem;
+        }
+
+        /* APPLICATIONS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .app-card {
+            border-radius: 28px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            background: radial-gradient(circle at top, rgba(79,213,221,0.13), transparent 35%), var(--panel);
+            box-shadow: var(--shadow);
+        }
+
+        .app-image {
+            height: 220px;
+            border-radius: 20px;
+            margin-bottom: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(79,213,221,0.18);
+            background: transparent;
+        }
+
+        .app-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .app-image-surgery img {
+            object-fit: contain;
+            object-position: center;
+            padding: 8px;
+            background: #ffffff;
+        }
+
+        .app-image-contain {
+            height: 340px;
+            overflow: hidden;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-image-contain img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center center;
+            image-rendering: auto;
+            display: block;
+            margin: auto;
+        }
+
+        .app-image-dce {
+            height: 220px;
+            border-radius: 20px;
+            margin-bottom: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(79,213,221,0.18);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-image-dce img {
+            width: 108%;
+            height: 108%;
+            object-fit: contain;
+            object-position: center center;
+            padding: 4px;
+            image-rendering: auto;
+            display: block;
+            margin: auto;
+        }
+
+
+        /* VALUE PROPOSITION SNAPSHOT */
+        .value-snapshot-section {
+            padding-top: 40px;
+            background:
+                radial-gradient(circle at 18% 10%, rgba(79,213,221,0.13), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(114,215,139,0.10), transparent 30%);
+        }
+
+        .value-snapshot {
+            border: 1px solid rgba(79,213,221,0.32);
+            border-radius: 34px;
+            padding: clamp(30px, 5vw, 54px);
+            background:
+                radial-gradient(circle at top left, rgba(79,213,221,0.16), transparent 34%),
+                linear-gradient(145deg, rgba(79,213,221,0.11), rgba(114,215,139,0.06), var(--panel));
+            box-shadow: var(--shadow);
+        }
+
+        .value-snapshot h2 {
+            font-size: clamp(2.3rem, 5vw, 4.8rem);
+            line-height: 1.02;
+            letter-spacing: -0.06em;
+            max-width: 1100px;
+            margin-bottom: 26px;
+        }
+
+        .value-snapshot p {
+            font-size: 1.18rem;
+            max-width: 1080px;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+            margin-top: 38px;
+        }
+
+        .value-card {
+            border-radius: 28px;
+            padding: 30px;
+            border: 1px solid rgba(79,213,221,0.18);
+            background: linear-gradient(180deg, rgba(255,255,255,0.045), var(--panel));
+            box-shadow: var(--shadow);
+            min-height: 245px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .value-card h3 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 1.28rem;
+            line-height: 1.1;
+            min-height: 1.45rem;
+            display: flex;
+            align-items: flex-start;
+            white-space: nowrap;
+        }
+
+        .value-card p {
+            font-size: 1.02rem;
+            margin-bottom: 0;
+        }
+
+
+
+        
+        /* FIREFOX TRANSPARENT IMAGE FIX */
+        .comparison-image,
+        .comparison-image img,
+        .application-detail-image,
+        .application-detail-image img,
+        .app-image,
+        .app-image img {
+            background: transparent !important;
+            display: block;
+        }
+
+/* APPLICATION DETAIL CARDS */
+        .application-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .application-detail-card {
+            border-radius: 28px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            background: radial-gradient(circle at top, rgba(79,213,221,0.13), transparent 35%), var(--panel);
+            box-shadow: var(--shadow);
+        }
+
+        .application-detail-card h3 {
+            margin: 0 0 16px;
+            font-size: 1.28rem;
+        }
+
+        .application-detail-card p {
+            font-size: 0.98rem;
+            margin-top: 0;
+        }
+
+        .application-detail-label {
+            color: var(--cyan);
+            font-weight: 900;
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin: 18px 0 6px;
+        }
+
+        .application-detail-image {
+            height: 220px;
+            border-radius: 20px;
+            margin-bottom: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(79,213,221,0.18);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .application-detail-image[data-zoom-image] {
+            cursor: zoom-in;
+        }
+
+        .application-detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.18s ease;
+            transform-origin: center;
+        }
+
+        .application-detail-image.contain img {
+            object-fit: contain;
+            padding: 6px;
+        }
+
+        .application-detail-image.dce img {
+            width: 108%;
+            height: 108%;
+            object-fit: contain;
+            object-position: center center;
+            padding: 4px;
+        }
+
+        .image-zoom-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 220;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+            background: rgba(3,8,13,0.84);
+            backdrop-filter: blur(10px);
+        }
+
+        .image-zoom-modal.is-open {
+            display: flex;
+        }
+
+        .image-zoom-panel {
+            position: relative;
+            width: min(100%, var(--zoom-width, 900px));
+            max-width: calc(100vw - 56px);
+            max-height: calc(100vh - 56px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-zoom-panel img {
+            width: auto;
+            height: auto;
+            max-width: min(100%, var(--zoom-width, 900px));
+            max-height: calc(100vh - 96px);
+            border-radius: 18px;
+            border: 1px solid rgba(79,213,221,0.28);
+            background: var(--panel);
+            box-shadow: var(--shadow);
+        }
+
+        .image-zoom-panel video {
+            width: min(100%, 960px);
+            max-height: calc(100vh - 96px);
+            border-radius: 18px;
+            border: 1px solid rgba(79,213,221,0.28);
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .image-zoom-close {
+            position: absolute;
+            top: -18px;
+            right: -18px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            color: var(--text);
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .image-zoom-close:hover {
+            border-color: rgba(79,213,221,0.55);
+            color: var(--cyan);
+        }
+
+
+        /* VALIDATION */
+        .data-section {
+            background: linear-gradient(180deg, transparent, rgba(79,213,221,0.035), transparent);
+        }
+
+        .validation-figure {
+            border-radius: 28px;
+            overflow: hidden;
+            background: transparent;
+            border: 1px solid rgba(79,213,221,0.22);
+            box-shadow: var(--shadow);
+            padding: 12px;
+        }
+
+        .validation-figure img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 18px;
+        }
+
+        /* PUBLICATIONS */
+        .publication-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .publication-card {
+            width: 100%;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), var(--panel));
+            border-radius: 26px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .publication-card h3 {
+            font-size: 1.6rem;
+            margin-top: 0;
+        }
+
+        .publication-card p {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            margin-bottom: 24px;
+        }
+
+        .publication-card i {
+            color: var(--cyan);
+        }
+
+        /* CONTACT */
+        .contact {
+            background:
+                radial-gradient(circle at center, rgba(79,213,221,0.14), transparent 42%),
+                linear-gradient(135deg, rgba(79,213,221,0.10), rgba(114,215,139,0.06)),
+                #031016;
+        }
+
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        .contact-form {
+            background: linear-gradient(145deg, rgba(79,213,221,0.10), rgba(114,215,139,0.06), var(--panel));
+            border: 1px solid rgba(79,213,221,0.24);
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 14px 15px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            outline: none;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .form-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        .form-status {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            margin-top: 14px;
+            min-height: 1.4em;
+        }
+
+        .form-status.is-success {
+            color: #8ff0bd;
+        }
+
+        .form-status.is-error {
+            color: #ffb0a8;
+        }
+
+        footer {
+            padding: 34px clamp(20px, 7vw, 96px);
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-gallery {
+            display: grid;
+            grid-template-columns: repeat(9, 150px);
+            gap: 12px;
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            cursor: grab;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            user-select: none;
+        }
+
+        .footer-gallery.is-dragging {
+            cursor: grabbing;
+            scroll-behavior: auto;
+        }
+
+        .footer-gallery-wrap {
+            position: relative;
+            width: min(980px, 100%);
+        }
+
+        .gallery-arrow {
+            position: absolute;
+            top: 44%;
+            z-index: 2;
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(79,213,221,0.28);
+            border-radius: 50%;
+            background: rgba(3,8,13,0.76);
+            color: var(--text);
+            font-size: 1.45rem;
+            line-height: 1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.32);
+        }
+
+        .gallery-arrow:hover {
+            color: var(--cyan);
+            border-color: rgba(79,213,221,0.55);
+        }
+
+        .gallery-arrow.prev {
+            left: -14px;
+        }
+
+        .gallery-arrow.next {
+            right: -14px;
+        }
+
+        .footer-thumb {
+            margin: 0;
+            min-width: 0;
+        }
+
+        .footer-thumb img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            border-radius: 10px;
+            border: 1px solid rgba(79,213,221,0.22);
+            cursor: zoom-in;
+            transition: transform 0.18s ease, border-color 0.18s ease;
+            transform-origin: center;
+        }
+
+        .footer-video-thumb {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border-radius: 10px;
+            border: 1px solid rgba(79,213,221,0.22);
+            background:
+                radial-gradient(circle at 32% 30%, rgba(79,213,221,0.24), transparent 28%),
+                linear-gradient(145deg, rgba(79,213,221,0.14), rgba(114,215,139,0.10), var(--panel));
+            color: var(--text);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .footer-video-thumb:hover,
+        .footer-video-thumb.is-selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 2px rgba(79,213,221,0.28);
+        }
+
+        .footer-thumb img:hover {
+            border-color: rgba(79,213,221,0.55);
+        }
+
+        .footer-thumb img.is-selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 2px rgba(79,213,221,0.28);
+        }
+
+        .footer-thumb figcaption {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 0.72rem;
+            line-height: 1.25;
+        }
+
+        .footer-inner > div:nth-child(2) {
+            display: none;
+        }
+
+        @media (max-width: 980px) {
+            .hero,
+            .split,
+            .paired-comparison-head,
+            .paired-comparison-row,
+            .contact-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .features,
+            .workflow,
+            .cards,
+            .comparison-image-grid,
+            .form-row,
+            .value-grid,
+            .application-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .value-card h3 {
+                min-height: auto;
+                white-space: normal;
+            }
+
+            .comparison-image-card {
+                grid-template-rows: minmax(0, 260px) auto;
+                min-height: 350px;
+            }
+
+            .feature h3 {
+                white-space: normal;
+            }
+
+            .logo img {
+                height: 110px;
+            }
+
+            section {
+                padding: 72px 22px;
+            }
+
+            .footer-gallery {
+                grid-template-columns: repeat(9, 140px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Google Tag Manager noscript disabled for now. Re-enable if managing analytics through GTM later.
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRZPLHFM"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    End Google Tag Manager (noscript) -->
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#">
+                <img src="sphynxvision-logo.png" alt="SphynxVision Logo">
+            </a>
+            <a class="logo-subtitle" href="https://www.oncoblaze.com/" target="_blank" rel="noopener noreferrer">by OncoBLAZE<sup>TM</sup></a>
+        </div>
+
+        <div class="nav-links">
+            <a href="#technology">Technology</a>
+            <a href="#applications">Applications</a>
+            <a href="news.html">News</a>
+            <a href="#publications">Publications</a>
+            
+            <a href="#contact" class="btn primary">Contact Us</a>
+        </div>
+    </nav>
+
+
+    <!-- HERO SECTION -->
+    <section>
+        <div class="hero">
+            <div>
+                <h1>
+                    Outside-the-box 
+                    <span class="gradient-text"> preclinical imaging</span>
+                </h1>
+
+                <p>
+                    SphynxVision enables real-time, flexible preclinical fluorescence imaging under ambient light —
+                    designed for researchers who need to image during interventions, not only after them.
+                </p>
+
+                <div class="hero-actions">
+                    <button class="btn primary" type="button" data-open-beta-modal>Join the SphynxVision Pioneer Program</button>
+                    <button class="btn secondary" type="button" data-open-testimonials-modal>Testimonials</button>
+                </div>
+            </div>
+
+            <div class="product-visual">
+                <img src="product-schematic.png" alt="SphynxVision preclinical imaging system schematic">
+            </div>
+        </div>
+    </section>
+
+
+    <!-- VALUE PROPOSITION SNAPSHOT -->
+    <section class="value-snapshot-section" id="value">
+        <div class="section-inner">
+            <div class="value-snapshot">
+                <div class="eyebrow">Why buy SphynxVision</div>
+
+                <h2>
+                    Stop adapting your experiment to the imaging device.
+                </h2>
+
+                <p>
+                    Existing imaging facilities are powerful, but they often force researchers into scheduled access,
+                    closed-chamber workflows, animal transfer, and endpoint-style imaging. SphynxVision gives teams a
+                    bench-side, open-access way to image dynamic fluorescence during the study itself.
+                </p>
+
+                <div class="value-grid">
+                    <div class="value-card">
+                        <h3>Imaging brilliance</h3>
+                        <p>
+                            Proprietary light source and image processing algorithm.
+                        </p>
+                    </div>
+
+                    <div class="value-card">
+                        <h3>Less waiting</h3>
+                        <p>
+                            Image when the study is ready instead of waiting for core facility schedules,
+                            chamber-based workflows, or shared instrument availability.
+                        </p>
+                    </div>
+
+                    <div class="value-card">
+                        <h3>More flexible studies</h3>
+                        <p>
+                            Support dosing, heating, perfusion, surgery, and device-assisted workflows
+                            without locking the animal inside a closed chamber.
+                        </p>
+                    </div>
+
+                    <div class="value-card">
+                        <h3>Dynamic insight</h3>
+                        <p>
+                            Capture real-time fluorescence kinetics that may be missed by endpoint imaging
+                            after transfer to a closed imaging system.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- PROBLEM / SOLUTION -->
+    <section>
+        <div class="section-inner">
+            <div class="section-head">
+                <div class="eyebrow">Problem → Solution</div>
+                <h2>Traditional imaging was built around the chamber. SphynxVision is built around the experiment.</h2>
+            </div>
+
+            <div class="paired-comparison">
+                <div class="paired-comparison-head">
+                    <div>Traditional systems</div>
+                    <div>SphynxVision</div>
+                </div>
+
+                <div class="paired-comparison-row">
+                    <div class="paired-comparison-cell"><span class="bad">×</span> Limited in vivo resolution</div>
+                    <div class="paired-comparison-cell solution"><span class="good">✓</span> Superior image quality with high in vivo resolution</div>
+                </div>
+
+                <div class="paired-comparison-row">
+                    <div class="paired-comparison-cell"><span class="bad">×</span> Require sealed dark chambers</div>
+                    <div class="paired-comparison-cell solution"><span class="good">✓</span> Real-time imaging under ambient light</div>
+                </div>
+
+                <div class="paired-comparison-row">
+                    <div class="paired-comparison-cell"><span class="bad">×</span> Slow imaging and longer exposure times</div>
+                    <div class="paired-comparison-cell solution"><span class="good">✓</span> Fast acquisition for dynamic and kinetic studies</div>
+                </div>
+
+                <div class="paired-comparison-row">
+                    <div class="paired-comparison-cell"><span class="bad">×</span> Limited ability to manipulate the animal during imaging</div>
+                    <div class="paired-comparison-cell solution"><span class="good">✓</span> Enables intra-procedural imaging and intervention workflows</div>
+                </div>
+
+                <div class="paired-comparison-row">
+                    <div class="paired-comparison-cell"><span class="bad">×</span> Large, costly systems located in core facilities, with schedule-dependent workflows</div>
+                    <div class="paired-comparison-cell solution"><span class="good">✓</span> Cost-efficient system placed in the lab that enables imaging anytime</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- VISUAL COMPARISON -->
+    <section class="comparison-visuals">
+        <div class="section-inner">
+            <div class="section-head">
+                <div class="eyebrow">Visual comparison</div>
+                <h2>SphynxVision vs. traditional systems.</h2>
+            </div>
+
+            <div class="comparison-image-grid">
+                <div class="comparison-image-card">
+                    <img src="comparison-2.png" alt="Traditional systems comparison image" data-zoom-image>
+                    <h3>Traditional systems</h3>
+                </div>
+
+                <div class="comparison-image-card">
+                    <img src="comparison-1.png" alt="SphynxVision comparison image" data-zoom-image>
+                    <h3>SphynxVision</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CORE PLATFORM -->
+    <section id="technology">
+        <div class="section-inner">
+            <div class="section-head">
+                <div class="eyebrow">Core platform</div>
+                <h2>High frame rate fluorescence imaging with workflow flexibility.</h2>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    
+                    <h3>Real-time imaging</h3>
+                    <p>Visualize fluorescence response during the experiment with live display and fast acquisition.</p>
+                </div>
+
+                <div class="feature">
+                   
+                    <h3>Ambient light operation</h3>
+                    <p>No need for an enclosed chamber for flexible workflows.</p>
+                </div>
+
+                <div class="feature">
+                    
+                    <h3>Multi-wavelength selection</h3>
+                    <p>Support for visible-to-NIR fluorescence imaging applications.</p>
+                </div>
+
+                <div class="feature">
+                    
+                    <h3>Real time Overlay</h3>
+                    <p>Fluorescence overlay on background image in real time.</p>
+                </div>
+
+                <div class="feature">
+                  
+                    <h3>Kinetic imaging</h3>
+                    <p>Capture time series for pharmacokinetics, perfusion, and angiography studies supporting multiple frames per second.</p>
+                </div>
+
+                <div class="feature">
+                  
+                    <h3>Standard image file format with metadata</h3>
+                    <p>Save imaging settings, wavelength metadata, and calibration values with acquired data.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+<section class="data-section" id="data">
+        <div class="section-inner">
+            <div class="section-head">
+                <div class="eyebrow">Validation</div>
+                <h2>SphynxVision achieves detection sensitivity equivalent to closed chamber systems from three leading manufacturers.</h2>
+            </div>
+
+            <div class="validation-figure">
+                <img src="data-validation.png" alt="SphynxVision data validation figure">
+            </div>
+        </div>
+    </section>
+
+
+    <!-- INTERVENTIONAL IMAGING WORKFLOW -->
+    <section>
+        <div class="section-inner">
+            <div class="section-head">
+                <div class="eyebrow">Workflow</div>
+                <h2>Built around the experiment, not the imaging chamber.</h2>
+                <p>
+                    SphynxVision is designed to make preclinical fluorescence imaging easier to access,
+                    easier to repeat, and easier to integrate into active experimental workflows.
+                </p>
+            </div>
+
+            <div class="workflow">
+                <div class="step">
+                    <div class="step-heading">
+                        <h3>Place imaging at the bench</h3>
+                    </div>
+                    <p>
+                        Move fluorescence imaging closer to the researcher instead of moving every study
+                        through a shared closed-chamber system.
+                    </p>
+                </div>
+
+                <div class="step">
+                    <div class="step-heading">
+                        <h3>Adapt to the study</h3>
+                    </div>
+                    <p>
+                        Support interventions, dosing, heating, surgical access, perfusion,
+                        and device-assisted studies without interrupting the workflow.
+                    </p>
+                </div>
+
+                <div class="step">
+                    <div class="step-heading">
+                        <h3>Measure response in real time</h3>
+                    </div>
+                    <p>
+                        Capture live fluorescence response and export ROI, intensity,
+                        and kinetic data for analysis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- APPLICATIONS -->
+    <section id="applications">
+        <div class="section-inner">
+            <div class="section-head">
+                <div class="eyebrow">Applications</div>
+                <h2>SphynxVision Enables Novel Imaging Research Applications.</h2>
+                <p>
+                    SphynxVision is designed for studies where imaging needs to happen during the experiment — not only after the animal has been moved into a closed imaging chamber.
+                </p>
+            </div>
+
+            <div class="application-detail-grid">
+                <div class="application-detail-card">
+                    <div class="application-detail-image contain" data-zoom-image>
+                        <img src="application-surgery.png" alt="Image guided surgery application">
+                    </div>
+
+                    <h3>Image guided surgery</h3>
+
+                    <div class="application-detail-label">Study overview</div>
+                    <p>
+                        Real-time fluorescence visualization during tumor localization, surgical manipulation, or tissue-level intervention.
+                    </p>
+
+                    <div class="application-detail-label">Problem solved</div>
+                    <p>
+                        Closed chamber systems limit physical access and make it difficult to image while the procedure is actively changing.
+                    </p>
+
+                    <div class="application-detail-label">Why SphynxVision is essential</div>
+                    <p>
+                        SphynxVision keeps the imaging field open, allowing researchers to intervene and visualize fluorescence response at the same time.
+                    </p>
+                </div>
+
+                <div class="application-detail-card">
+                    <div class="application-detail-image" data-zoom-image>
+                        <img src="application-drug-delivery.png" alt="Heat-triggered drug delivery application">
+                    </div>
+
+                    <h3>Heat-triggered drug delivery</h3>
+
+                    <div class="application-detail-label">Study overview</div>
+                    <p>
+                        Monitor fluorescence changes during thermal activation, triggered release, nanoparticle delivery, or thermosensitive liposome studies.
+                    </p>
+
+                    <div class="application-detail-label">Problem solved</div>
+                    <p>
+                        Drug release and uptake can happen quickly. Endpoint imaging may miss when and where delivery occurred.
+                    </p>
+
+                    <div class="application-detail-label">Why SphynxVision is essential</div>
+                    <p>
+                        SphynxVision enables fluorescence imaging during heating or triggering, helping researchers capture release kinetics in real time.
+                    </p>
+                </div>
+
+                <div class="application-detail-card">
+                    <div class="application-detail-image dce" data-zoom-image>
+                        <img src="application-dynamic-imaging.png" alt="Dynamic imaging application">
+                    </div>
+
+                    <h3>Dynamic imaging</h3>
+
+                    <div class="application-detail-label">Study overview</div>
+                    <p>
+                        Track vascular dynamics, perfusion maps, angiography, and kinetic fluorescence changes across time.
+                    </p>
+
+                    <div class="application-detail-label">Problem solved</div>
+                    <p>
+                        Perfusion and vascular response can change rapidly and may not be captured by a single endpoint image.
+                    </p>
+
+                    <div class="application-detail-label">Why SphynxVision is essential</div>
+                    <p>
+                        SphynxVision supports dynamic imaging and downstream ROI or kinetic analysis for vascular and perfusion-focused studies.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- VALIDATION -->
+    
+
+
+    <!-- PUBLICATIONS -->
+    <section id="publications">
+        <div class="section-inner">
+            <div class="section-head">
+                <div class="eyebrow">Publications</div>
+                <h2>Scientific publications and conference presentations</h2>
+            </div>
+
+            <div class="publication-grid">
+                <div class="publication-card">
+                    <h3>Publications & Conference Presentations</h3>
+
+                    <p>
+                        Haemmerich, D., Newton, D.A., Patel, R.P., Rossmann, C. &amp; VanDenburgh, A.
+                        Dynamic Contrast-Enhanced Fluorescence Imaging of Tumors with an Open Imaging System.
+                        <i>World Molecular Imaging Congress (WMIC) (2026).</i>
+                    </p>
+
+                    <p>
+                        Haemmerich, D., Newton, D.A., Patel, R.P., Rossmann, C. &amp; VanDenburgh, A.
+                        An Open Preclinical Imaging System Enables Fluorescence Image-Guided Procedures.
+                        <i>World Molecular Imaging Congress (WMIC) (2026).</i>
+                    </p>
+
+                    <p>
+                        Haemmerich, D., Rossmann, C., Newton, D.A., Patel, R.P. &amp; VanDenburgh, A.
+                        Fluorescence imaging system for intra-procedural preclinical applications.
+                        <i>IEEE Engineering in Medicine and Biology Conference (EMBC), Toronto, Canada (2026).</i>
+                    </p>
+
+                    <p>
+                        Haemmerich, D., VanDenburgh, A., Rossmann, C., Newton, D.A. &amp; Patel, R.P.
+                        Imaging chemotherapy delivery from thermosensitive liposomes by fluorescence imaging.
+                        <i>Society for Thermal Medicine Annual Meeting, Savannah, GA, USA (2026).</i>
+                    </p>
+
+                    <p>
+                        Haemmerich, D., VanDenburgh, A., Rossmann, C., Newton, D.A. &amp; Patel, R.P.
+                        Fluorescence imaging system for real-time visualization of chemotherapy delivery.
+                        <i>World Molecular Imaging Congress (WMIC), Anchorage, AK, USA (2025).</i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="section-inner">
+            <div class="contact-wrap">
+                <div>
+                    <div class="eyebrow">Contact us</div>
+                    <h2>Contact us for SphynxVision data or collaboration inquiries.</h2>
+
+                </div>
+
+                <form class="contact-form" id="contactForm" action="mailto:haemmerich@oncoblaze.com" method="POST" enctype="text/plain" data-email-form="contact_us">
+                    <input type="hidden" name="_subject" value="New SphynxVision contact inquiry">
+                    <input type="hidden" name="form_name" value="Contact Us">
+
+                    <div class="form-row">
+                        <div>
+                            <label for="name">Name</label>
+                            <input id="name" name="Name" type="text" placeholder="Your full name" required>
+                        </div>
+
+                        <div>
+                            <label for="role">Designation / Role</label>
+                            <input id="role" name="Designation or Role" type="text" placeholder="PI, Scientist, Director, etc." required>
+                        </div>
+                    </div>
+
+                    <label for="organization">University / Company</label>
+                    <input id="organization" name="University or Company" type="text" placeholder="Institution or company name" required>
+
+                    <label for="email">Email address</label>
+                    <input id="email" name="Email" type="email" placeholder="name@institution.edu" required>
+
+                    <label for="message">Message</label>
+                    <textarea id="message" name="Message" placeholder="Tell us what application or imaging workflow you are interested in."></textarea>
+
+                    <button class="btn primary" type="submit">Submit inquiry</button>
+                    <div class="form-status" role="status" aria-live="polite"></div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div>SphynxVision™</div>
+            <div>Technology · Applications · News · Publications · Contact</div>
+            <div class="footer-gallery-wrap">
+                <button class="gallery-arrow prev" type="button" aria-label="Scroll thumbnails left" data-gallery-scroll="prev">&#8249;</button>
+
+                <div class="footer-gallery" aria-label="SphynxVision tumor image thumbnails">
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-02.png" alt="SphynxVision tumor fluorescence image" data-gallery-thumb>
+                        <figcaption>Tumor fluorescence map</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-04.png" alt="Tumor fragment macro image" data-gallery-thumb>
+                        <figcaption>Tumor fragment macro</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-05.png" alt="Fluorescent tumor fragment image" data-gallery-thumb>
+                        <figcaption>Fluorescent fragment</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-06.png" alt="Mouse tumor imaging setup" data-gallery-thumb>
+                        <figcaption>Mouse imaging view</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-07.png" alt="Residual GFP tumor signal in mouse" data-gallery-thumb>
+                        <figcaption>Residual GFP signal</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-08.png" alt="Excised GFP tumor fragments" data-gallery-thumb>
+                        <figcaption>Excised fragments</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-09.png" alt="GFP tumor fragment field" data-gallery-thumb>
+                        <figcaption>Fragment field</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                    <img src="tumor-gallery-10.png" alt="Tumor fluorescence close-up" data-gallery-thumb>
+                        <figcaption>Fluorescence close-up</figcaption>
+                    </figure>
+
+                    <figure class="footer-thumb">
+                        <button class="footer-video-thumb" type="button" data-gallery-video="video.mp4" aria-label="Open heat based drug delivery video">▶</button>
+                        <figcaption>Heat based drug delivery</figcaption>
+                    </figure>
+                </div>
+
+                <button class="gallery-arrow next" type="button" aria-label="Scroll thumbnails right" data-gallery-scroll="next">&#8250;</button>
+            </div>
+        </div>
+    </footer>
+
+    <div class="beta-modal" id="betaModal" aria-hidden="true">
+        <div class="beta-modal-panel" role="dialog" aria-modal="true" aria-labelledby="betaModalTitle">
+            <button class="beta-modal-close" type="button" aria-label="Close beta program information" data-close-beta-modal>&times;</button>
+
+            <div class="eyebrow">SphynxVision Pioneer Program</div>
+            <h2 id="betaModalTitle">Become an Early Expert in Next-Generation Imaging</h2>
+
+            <p>
+                Join the SphynxVision Pioneer Program and get early access to the SphynxVision imaging platform.
+            </p>
+
+            <ol>
+                <li>Build expertise in advanced imaging methods.</li>
+                <li>Explore real-time fluorescence, perfusion, PK, and intervention imaging.</li>
+                <li>Contribute to future workflows and applications.</li>
+                <li>Expand your scientific network.</li>
+            </ol>
+
+            <h3>Ideal for innovators in:</h3>
+            <p>
+                Academia &bull; Core Facilities &bull; Biotech &bull; Pharma &bull; CROs &bull; MedTech &bull; Startups
+            </p>
+
+            <div class="hero-actions">
+                <button class="btn primary" type="button" data-open-beta-form-modal>Request Early Access</button>
+                <button class="btn secondary" type="button" data-close-beta-modal>Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="beta-modal" id="betaFormModal" aria-hidden="true">
+        <div class="beta-modal-panel" role="dialog" aria-modal="true" aria-labelledby="betaFormModalTitle">
+            <button class="beta-modal-close" type="button" aria-label="Close early access form" data-close-beta-form-modal>&times;</button>
+
+            <div class="eyebrow">Request Early Access</div>
+            <h2 id="betaFormModalTitle">Join the SphynxVision Pioneer Program</h2>
+
+            <form class="beta-access-form" id="betaAccessForm" action="mailto:haemmerich@oncoblaze.com" method="POST" enctype="text/plain" data-email-form="pioneer_program_early_access">
+                <input type="hidden" name="_subject" value="New SphynxVision Pioneer Program early access request">
+                <input type="hidden" name="form_name" value="SphynxVision Pioneer Program">
+
+                <label for="beta-name">Name</label>
+                <input id="beta-name" name="Name" type="text" placeholder="Your full name" required>
+
+                <label for="beta-email">Email address</label>
+                <input id="beta-email" name="Email" type="email" placeholder="name@institution.edu" required>
+
+                <label for="beta-affiliation">Company / University affiliation</label>
+                <input id="beta-affiliation" name="Company or University Affiliation" type="text" placeholder="Institution or company name" required>
+
+                <button class="btn primary" type="submit">Submit request</button>
+                <div class="form-status" role="status" aria-live="polite"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="beta-modal" id="testimonialsModal" aria-hidden="true">
+        <div class="beta-modal-panel" role="dialog" aria-modal="true" aria-labelledby="testimonialsModalTitle">
+            <button class="beta-modal-close" type="button" aria-label="Close testimonials" data-close-testimonials-modal>&times;</button>
+
+            <div class="eyebrow">Testimonials</div>
+            <h2 id="testimonialsModalTitle">What early users are saying</h2>
+
+            <div class="testimonial-list">
+                <div class="testimonial-card">
+                    <p>
+                        "SphynxVision lets our team think about fluorescence imaging as part of the experiment, not as a separate endpoint step."
+                    </p>
+                    <strong>Preclinical Imaging Scientist</strong>
+                    <p>Academic research lab</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p>
+                        "The ability to follow dynamic signal changes during an intervention opens up workflows that are difficult to run in a traditional chamber system."
+                    </p>
+                    <strong>Core Facility Director</strong>
+                    <p>Translational imaging center</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p>
+                        "For drug delivery studies, real-time access to perfusion and fluorescence behavior can make the workflow more informative and efficient."
+                    </p>
+                    <strong>R&amp;D Program Lead</strong>
+                    <p>Biotech innovation team</p>
+                </div>
+            </div>
+
+            <div class="hero-actions">
+                <button class="btn secondary" type="button" data-close-testimonials-modal>Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="image-zoom-modal" id="imageZoomModal" aria-hidden="true">
+        <div class="image-zoom-panel" role="dialog" aria-modal="true" aria-label="Expanded application image">
+            <button class="image-zoom-close" type="button" aria-label="Close expanded image" data-close-image-zoom>&times;</button>
+            <img id="imageZoomTarget" src="" alt="">
+            <video id="videoZoomTarget" controls playsinline style="display: none;"></video>
+        </div>
+    </div>
+
+    <script>
+        const betaModal = document.getElementById('betaModal');
+        const betaFormModal = document.getElementById('betaFormModal');
+        const contactForm = document.getElementById('contactForm');
+        const betaAccessForm = document.getElementById('betaAccessForm');
+        const testimonialsModal = document.getElementById('testimonialsModal');
+        const imageZoomModal = document.getElementById('imageZoomModal');
+        const imageZoomTarget = document.getElementById('imageZoomTarget');
+        const videoZoomTarget = document.getElementById('videoZoomTarget');
+        const footerGallery = document.querySelector('.footer-gallery');
+        const footerGalleryImages = document.querySelectorAll('[data-gallery-thumb]');
+        const footerGalleryVideos = document.querySelectorAll('[data-gallery-video]');
+        const galleryScrollButtons = document.querySelectorAll('[data-gallery-scroll]');
+        const openBetaModalButtons = document.querySelectorAll('[data-open-beta-modal]');
+        const closeBetaModalButtons = document.querySelectorAll('[data-close-beta-modal]');
+        const openBetaFormModalButtons = document.querySelectorAll('[data-open-beta-form-modal]');
+        const closeBetaFormModalButtons = document.querySelectorAll('[data-close-beta-form-modal]');
+        const openTestimonialsModalButtons = document.querySelectorAll('[data-open-testimonials-modal]');
+        const closeTestimonialsModalButtons = document.querySelectorAll('[data-close-testimonials-modal]');
+        const zoomImageButtons = document.querySelectorAll('[data-zoom-image]');
+        const closeImageZoomButtons = document.querySelectorAll('[data-close-image-zoom]');
+        const formEmailRecipient = 'haemmerich@oncoblaze.com';
+
+        function openBetaModal() {
+            betaModal.classList.add('is-open');
+            betaModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeBetaModal() {
+            betaModal.classList.remove('is-open');
+            betaModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+        }
+
+        function openBetaFormModal() {
+            closeBetaModal();
+            betaFormModal.classList.add('is-open');
+            betaFormModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+            betaAccessForm.querySelector('input').focus();
+        }
+
+        function closeBetaFormModal() {
+            betaFormModal.classList.remove('is-open');
+            betaFormModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+        }
+
+        function openTestimonialsModal() {
+            testimonialsModal.classList.add('is-open');
+            testimonialsModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeTestimonialsModal() {
+            testimonialsModal.classList.remove('is-open');
+            testimonialsModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+        }
+
+        function openImageZoom(image) {
+            videoZoomTarget.pause();
+            videoZoomTarget.style.display = 'none';
+            videoZoomTarget.removeAttribute('src');
+            imageZoomTarget.style.display = 'block';
+            imageZoomTarget.src = image.src;
+            imageZoomTarget.alt = image.alt;
+            imageZoomTarget.dataset.zoomScale = '1';
+            imageZoomTarget.style.transform = 'scale(1)';
+            imageZoomTarget.style.transformOrigin = 'center';
+            imageZoomTarget.onload = () => {
+                imageZoomModal.style.setProperty('--zoom-width', `${imageZoomTarget.naturalWidth}px`);
+            };
+            if (imageZoomTarget.complete) {
+                imageZoomModal.style.setProperty('--zoom-width', `${imageZoomTarget.naturalWidth}px`);
+            }
+            imageZoomModal.classList.add('is-open');
+            imageZoomModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+        }
+
+        function openVideoZoom(button) {
+            imageZoomTarget.style.display = 'none';
+            imageZoomTarget.removeAttribute('src');
+            imageZoomTarget.alt = '';
+            videoZoomTarget.src = button.dataset.galleryVideo;
+            videoZoomTarget.load();
+            videoZoomTarget.style.display = 'block';
+            imageZoomModal.classList.add('is-open');
+            imageZoomModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeImageZoom() {
+            imageZoomModal.classList.remove('is-open');
+            imageZoomModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+            imageZoomTarget.removeAttribute('src');
+            imageZoomTarget.alt = '';
+            imageZoomTarget.dataset.zoomScale = '1';
+            imageZoomTarget.style.transform = 'scale(1)';
+            imageZoomTarget.style.transformOrigin = 'center';
+            imageZoomTarget.style.display = 'block';
+            videoZoomTarget.pause();
+            videoZoomTarget.removeAttribute('src');
+            videoZoomTarget.style.display = 'none';
+            resetInlineImageZoom();
+        }
+
+        let selectedFooterImageIndex = 0;
+
+        function selectFooterImage(index) {
+            if (!footerGalleryImages.length) {
+                return;
+            }
+            selectedFooterImageIndex = Math.max(0, Math.min(footerGalleryImages.length - 1, index));
+            footerGalleryImages.forEach((image, imageIndex) => {
+                image.classList.toggle('is-selected', imageIndex === selectedFooterImageIndex);
+            });
+            footerGalleryVideos.forEach((videoButton, videoIndex) => {
+                videoButton.classList.toggle('is-selected', footerGalleryImages.length + videoIndex === selectedFooterImageIndex);
+            });
+            if (footerGallery) {
+                const galleryItems = [...footerGalleryImages, ...footerGalleryVideos];
+                const selectedItem = galleryItems[selectedFooterImageIndex];
+                const imageLeft = selectedItem.offsetLeft;
+                const imageCenter = imageLeft - (footerGallery.clientWidth / 2) + (selectedItem.clientWidth / 2);
+                footerGallery.scrollTo({
+                    left: imageCenter,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function getInlineImageMaxScale(image) {
+            const container = image.matches('[data-zoom-image]')
+                ? image
+                : image.closest('[data-zoom-image]');
+            const bounds = container ? container.getBoundingClientRect() : image.getBoundingClientRect();
+            const maxWidthScale = image.naturalWidth ? image.naturalWidth / Math.max(1, bounds.width) : 2;
+            const maxHeightScale = image.naturalHeight ? image.naturalHeight / Math.max(1, bounds.height) : 2;
+            return Math.max(1.8, Math.min(2.4, maxWidthScale, maxHeightScale));
+        }
+
+        function resetInlineImageZoom(container) {
+            const containers = container ? [container] : zoomImageButtons;
+            containers.forEach((item) => {
+                const image = item.matches('img') ? item : item.querySelector('img');
+                if (!image) {
+                    return;
+                }
+                image.dataset.zoomScale = '1';
+                image.style.transform = 'scale(1)';
+                image.style.transformOrigin = 'center';
+            });
+        }
+
+        openBetaModalButtons.forEach((button) => {
+            button.addEventListener('click', openBetaModal);
+        });
+
+        closeBetaModalButtons.forEach((button) => {
+            button.addEventListener('click', closeBetaModal);
+        });
+
+        openBetaFormModalButtons.forEach((button) => {
+            button.addEventListener('click', openBetaFormModal);
+        });
+
+        closeBetaFormModalButtons.forEach((button) => {
+            button.addEventListener('click', closeBetaFormModal);
+        });
+
+        openTestimonialsModalButtons.forEach((button) => {
+            button.addEventListener('click', openTestimonialsModal);
+        });
+
+        closeTestimonialsModalButtons.forEach((button) => {
+            button.addEventListener('click', closeTestimonialsModal);
+        });
+
+        zoomImageButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const image = button.matches('img') ? button : button.querySelector('img');
+                if (image) {
+                    const footerIndex = Array.from(footerGalleryImages).indexOf(image);
+                    if (footerIndex !== -1) {
+                        selectFooterImage(footerIndex);
+                    }
+                    openImageZoom(image);
+                }
+            });
+
+            button.addEventListener('mousemove', (event) => {
+                const image = button.matches('img') ? button : button.querySelector('img');
+                if (!image) {
+                    return;
+                }
+                const rect = button.getBoundingClientRect();
+                const x = ((event.clientX - rect.left) / rect.width) * 100;
+                const y = ((event.clientY - rect.top) / rect.height) * 100;
+                image.style.transformOrigin = `${x}% ${y}%`;
+            });
+
+            button.addEventListener('wheel', (event) => {
+                const image = button.matches('img') ? button : button.querySelector('img');
+                if (!image) {
+                    return;
+                }
+                const maxScale = getInlineImageMaxScale(image);
+                if (maxScale <= 1) {
+                    return;
+                }
+                event.preventDefault();
+                const currentScale = Number(image.dataset.zoomScale || '1');
+                const nextScale = event.deltaY < 0
+                    ? Math.min(maxScale, currentScale + 0.22)
+                    : Math.max(1, currentScale - 0.22);
+                image.dataset.zoomScale = String(nextScale);
+                image.style.transform = `scale(${nextScale})`;
+            }, { passive: false });
+
+            button.addEventListener('mouseleave', () => {
+                resetInlineImageZoom(button);
+            });
+        });
+
+        closeImageZoomButtons.forEach((button) => {
+            button.addEventListener('click', closeImageZoom);
+        });
+
+        if (footerGallery) {
+            let isFooterGalleryDragging = false;
+            let footerGalleryStartX = 0;
+            let footerGalleryStartScrollLeft = 0;
+            let footerGalleryDragDistance = 0;
+            let footerGalleryPressedImage = null;
+
+            footerGallery.addEventListener('pointerdown', (event) => {
+                isFooterGalleryDragging = true;
+                footerGalleryStartX = event.clientX;
+                footerGalleryStartScrollLeft = footerGallery.scrollLeft;
+                footerGalleryDragDistance = 0;
+                footerGalleryPressedImage = event.target.closest('[data-gallery-thumb], [data-gallery-video]');
+                footerGallery.classList.add('is-dragging');
+                footerGallery.setPointerCapture(event.pointerId);
+            });
+
+            footerGallery.addEventListener('pointermove', (event) => {
+                if (!isFooterGalleryDragging) {
+                    return;
+                }
+                const distance = event.clientX - footerGalleryStartX;
+                footerGalleryDragDistance = Math.max(footerGalleryDragDistance, Math.abs(distance));
+                footerGallery.scrollLeft = footerGalleryStartScrollLeft - distance;
+            });
+
+            function stopFooterGalleryDrag(event) {
+                const pressedImage = footerGalleryPressedImage;
+                const shouldOpenImage = pressedImage && footerGalleryDragDistance <= 16;
+                isFooterGalleryDragging = false;
+                footerGalleryPressedImage = null;
+                footerGallery.classList.remove('is-dragging');
+
+                if (shouldOpenImage) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                const galleryItems = [...footerGalleryImages, ...footerGalleryVideos];
+                const footerIndex = galleryItems.indexOf(pressedImage);
+                if (footerIndex !== -1) {
+                    selectFooterImage(footerIndex);
+                    if (pressedImage.matches('[data-gallery-video]')) {
+                        openVideoZoom(pressedImage);
+                    } else {
+                        openImageZoom(pressedImage);
+                    }
+                }
+            }
+        }
+
+            footerGallery.addEventListener('pointerup', stopFooterGalleryDrag);
+            footerGallery.addEventListener('pointercancel', stopFooterGalleryDrag);
+            footerGallery.addEventListener('mouseleave', () => {
+                if (isFooterGalleryDragging) {
+                    stopFooterGalleryDrag();
+                }
+            });
+
+            footerGallery.addEventListener('click', (event) => {
+                if (footerGalleryDragDistance > 16) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    footerGalleryDragDistance = 0;
+                    return;
+                }
+                footerGalleryDragDistance = 0;
+            }, true);
+
+            footerGallery.addEventListener('click', (event) => {
+                if (imageZoomModal.classList.contains('is-open')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                const galleryItem = event.target.closest('[data-gallery-thumb], [data-gallery-video]');
+                if (!galleryItem) {
+                    return;
+                }
+                const galleryItems = [...footerGalleryImages, ...footerGalleryVideos];
+                const footerIndex = galleryItems.indexOf(galleryItem);
+                if (footerIndex !== -1) {
+                    event.preventDefault();
+                    selectFooterImage(footerIndex);
+                    if (galleryItem.matches('[data-gallery-video]')) {
+                        openVideoZoom(galleryItem);
+                    } else {
+                        openImageZoom(galleryItem);
+                    }
+                }
+            });
+        }
+
+        footerGalleryImages.forEach((image, index) => {
+            image.addEventListener('click', (event) => {
+                if (imageZoomModal.classList.contains('is-open')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+                selectFooterImage(index);
+                openImageZoom(image);
+            });
+        });
+
+        footerGalleryVideos.forEach((button, index) => {
+            button.addEventListener('click', (event) => {
+                if (imageZoomModal.classList.contains('is-open')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+                selectFooterImage(footerGalleryImages.length + index);
+                openVideoZoom(button);
+            });
+        });
+
+        imageZoomModal.addEventListener('wheel', (event) => {
+            if (!imageZoomModal.classList.contains('is-open')) {
+                return;
+            }
+            event.preventDefault();
+            const rect = imageZoomTarget.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / Math.max(1, rect.width)) * 100;
+            const y = ((event.clientY - rect.top) / Math.max(1, rect.height)) * 100;
+            const currentScale = Number(imageZoomTarget.dataset.zoomScale || '1');
+            const nextScale = event.deltaY < 0
+                ? Math.min(2.4, currentScale + 0.18)
+                : Math.max(1, currentScale - 0.18);
+            imageZoomTarget.dataset.zoomScale = String(nextScale);
+            imageZoomTarget.style.transformOrigin = `${x}% ${y}%`;
+            imageZoomTarget.style.transform = `scale(${nextScale})`;
+        }, { passive: false });
+
+        videoZoomTarget.addEventListener('click', () => {
+            if (videoZoomTarget.paused) {
+                videoZoomTarget.play();
+            } else {
+                videoZoomTarget.pause();
+            }
+        });
+
+        galleryScrollButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const galleryItems = [...footerGalleryImages, ...footerGalleryVideos];
+                if (!galleryItems.length) {
+                    return;
+                }
+                const direction = button.dataset.galleryScroll === 'next' ? 1 : -1;
+                selectFooterImage(selectedFooterImageIndex + direction);
+            });
+        });
+
+        selectFooterImage(0);
+
+        function trackFormSubmit(formName) {
+            if (typeof gtag === 'function') {
+                gtag('event', 'form_submit', {
+                    form_name: formName
+                });
+            }
+        }
+
+        function setFormStatus(form, message, state) {
+            const status = form.querySelector('.form-status');
+            if (!status) {
+                return;
+            }
+            status.textContent = message;
+            status.classList.remove('is-success', 'is-error');
+            if (state) {
+                status.classList.add(`is-${state}`);
+            }
+        }
+
+        function handleEmailFormSubmit(form, formName) {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                trackFormSubmit(formName);
+
+                const formData = new FormData(form);
+                const subject = formData.get('_subject') || 'New SphynxVision website inquiry';
+                const bodyLines = [];
+
+                formData.forEach((value, key) => {
+                    if (key === '_subject') {
+                        return;
+                    }
+                    bodyLines.push(`${key}: ${value}`);
+                });
+
+                const mailtoUrl = `mailto:${formEmailRecipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+                window.location.href = mailtoUrl;
+                setFormStatus(form, 'Your email app will open with the form details. Please send the email to complete the inquiry.', 'success');
+            });
+        }
+
+        handleEmailFormSubmit(contactForm, 'contact_us');
+        handleEmailFormSubmit(betaAccessForm, 'pioneer_program_early_access');
+
+        betaModal.addEventListener('click', (event) => {
+            if (event.target === betaModal) {
+                closeBetaModal();
+            }
+        });
+
+        betaFormModal.addEventListener('click', (event) => {
+            if (event.target === betaFormModal) {
+                closeBetaFormModal();
+            }
+        });
+
+        testimonialsModal.addEventListener('click', (event) => {
+            if (event.target === testimonialsModal) {
+                closeTestimonialsModal();
+            }
+        });
+
+        imageZoomModal.addEventListener('click', (event) => {
+            if (event.target === imageZoomModal) {
+                closeImageZoom();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && betaModal.classList.contains('is-open')) {
+                closeBetaModal();
+            }
+
+            if (event.key === 'Escape' && betaFormModal.classList.contains('is-open')) {
+                closeBetaFormModal();
+            }
+
+            if (event.key === 'Escape' && testimonialsModal.classList.contains('is-open')) {
+                closeTestimonialsModal();
+            }
+
+            if (event.key === 'Escape' && imageZoomModal.classList.contains('is-open')) {
+                closeImageZoom();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
