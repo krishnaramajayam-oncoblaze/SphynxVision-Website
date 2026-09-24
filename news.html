@@ -231,6 +231,46 @@
             max-width: 820px;
         }
 
+        .news-media {
+            margin: 20px 0 18px;
+            max-width: 820px;
+        }
+
+        .news-media img,
+        .news-gallery img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .news-media img {
+            max-height: 560px;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .news-media figcaption,
+        .news-gallery figcaption {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.45;
+        }
+
+        .news-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+            max-width: 820px;
+        }
+
+        .news-gallery figure {
+            margin: 0;
+        }
+
         .news-tag {
             display: inline-flex;
             margin-bottom: 12px;
@@ -269,6 +309,10 @@
             .news-item {
                 grid-template-columns: 1fr;
                 gap: 10px;
+            }
+
+            .news-gallery {
+                grid-template-columns: 1fr;
             }
 
             section {
@@ -313,6 +357,36 @@
     <section class="news-section">
         <div class="section-inner">
             <div class="news-feed">
+                <article class="news-item" id="wmic-2026-debut">
+                    <div class="news-date">Sep 11, 2026</div>
+                    <div class="news-content">
+                        <span class="news-tag">Conference</span>
+                        <h3>SphynxVision&trade; makes its debut at WMIC 2026</h3>
+                        <figure class="news-media">
+                            <img src="wmic-2026-sphynxvision-booth-demo.jpg" alt="SphynxVision displayed at the WMIC 2026 conference booth during a live demonstration">
+                            <figcaption>SphynxVision displayed at the WMIC 2026 conference booth during a live demonstration.</figcaption>
+                        </figure>
+                        <p>What an exciting few days in Salt Lake City as we officially introduced SphynxVision&trade; to the molecular imaging community at WMIC 2026.</p>
+                        <p style="margin-top: 12px;">For our team, this was much more than exhibiting a new imaging device. It was an opportunity to introduce SphynxVision to researchers, demonstrate the technology in person, and hear how scientists envision using an open-field fluorescence imaging platform in their own research. These conversations also opened exciting possibilities for new avenues of research that could benefit from SphynxVision.</p>
+                        <p style="margin-top: 12px;">SphynxVision enables high-resolution, real-time preclinical fluorescence imaging in ambient light while maintaining continuous access to the animal. At WMIC, this led to fascinating conversations around dynamic imaging, image-guided procedures, drug delivery, tumor imaging, vascular imaging, and other applications where portability, open bench space, high resolution, and continuous access for intervention can make a real difference.</p>
+                        <p style="margin-top: 12px;">We were especially encouraged by the curiosity and engagement at our booth. Researchers did not just want to see images; they wanted to understand how the system worked, interact with it, and explore what they could do differently with an open imaging platform that provided high-resolution imaging in an ambient light setting.</p>
+                        <p style="margin-top: 12px;">And SphynxVision was not only on the exhibition floor. Four studies presented at WMIC 2026 used the SphynxVision platform across different preclinical imaging applications and a clinical application with human biopsy samples, providing an exciting glimpse into the range of science that can be performed with the system.</p>
+                        <p style="margin-top: 12px;">A huge thank you to everyone who visited us, shared their research challenges, asked tough questions, and gave us ideas about where this technology could go next.</p>
+                        <p style="margin-top: 12px;">We came to WMIC 2026 to introduce SphynxVision and left with new ideas, new relationships, new collaborations, and a growing community of researchers and friends. We are even more excited about what comes next.</p>
+                        <div class="news-gallery">
+                            <figure>
+                                <img src="wmic-2026-sphynxvision-hands-on-demo.jpg" alt="A WMIC attendee examining SphynxVision imaging in action and its open-field configuration">
+                                <figcaption>Hands-on demonstration: a WMIC attendee examines SphynxVision imaging in action and its open-field configuration.</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="wmic-2026-sphynxvision-booth-visitors.jpg" alt="Researchers visiting the SphynxVision booth at WMIC 2026">
+                                <figcaption>Researchers visit the SphynxVision booth at WMIC 2026 to see the platform in action and discuss potential applications and collaborations.</figcaption>
+                            </figure>
+                        </div>
+                        <p style="margin-top: 16px;"><strong style="color: var(--text);">SphynxVision. Imaging Brilliance. Outside the Box.</strong></p>
+                    </div>
+                </article>
+
                 <article class="news-item">
                     <div class="news-date">Sep 4, 2026</div>
                     <div class="news-content">
