@@ -71,6 +71,10 @@ if (mobileMenuToggle && navLinks) {
 
 /** Opens the Pioneer Program overview modal. */
 function openBetaModal() {
+    if (!betaModal) {
+        return;
+    }
+
     betaModal.classList.add('is-open');
     betaModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
@@ -78,6 +82,10 @@ function openBetaModal() {
 
 /** Closes the Pioneer Program overview modal. */
 function closeBetaModal() {
+    if (!betaModal) {
+        return;
+    }
+
     betaModal.classList.remove('is-open');
     betaModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
@@ -86,14 +94,22 @@ function closeBetaModal() {
 /** Switches from the overview modal to the early-access form modal. */
 function openBetaFormModal() {
     closeBetaModal();
+    if (!betaFormModal) {
+        return;
+    }
+
     betaFormModal.classList.add('is-open');
     betaFormModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
-    betaAccessForm.querySelector('input').focus();
+    betaAccessForm?.querySelector('input')?.focus();
 }
 
 /** Closes the early-access form modal. */
 function closeBetaFormModal() {
+    if (!betaFormModal) {
+        return;
+    }
+
     betaFormModal.classList.remove('is-open');
     betaFormModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
@@ -101,14 +117,22 @@ function closeBetaFormModal() {
 
 /** Opens the quote request form modal. */
 function openQuoteModal() {
+    if (!quoteModal) {
+        return;
+    }
+
     quoteModal.classList.add('is-open');
     quoteModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
-    quoteForm.querySelector('input').focus();
+    quoteForm?.querySelector('input')?.focus();
 }
 
 /** Closes the quote request form modal. */
 function closeQuoteModal() {
+    if (!quoteModal) {
+        return;
+    }
+
     quoteModal.classList.remove('is-open');
     quoteModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
@@ -116,6 +140,10 @@ function closeQuoteModal() {
 
 /** Opens the testimonials modal. */
 function openTestimonialsModal() {
+    if (!testimonialsModal) {
+        return;
+    }
+
     testimonialsModal.classList.add('is-open');
     testimonialsModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
@@ -123,6 +151,10 @@ function openTestimonialsModal() {
 
 /** Closes the testimonials modal. */
 function closeTestimonialsModal() {
+    if (!testimonialsModal) {
+        return;
+    }
+
     testimonialsModal.classList.remove('is-open');
     testimonialsModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
@@ -133,6 +165,10 @@ function closeTestimonialsModal() {
  * @param {HTMLImageElement} image - Image element to show in the modal.
  */
 function openImageZoom(image) {
+    if (!imageZoomModal || !imageZoomTarget || !videoZoomTarget || !imageZoomCaption) {
+        return;
+    }
+
     const caption = image.dataset.galleryTitle || '';
     videoZoomTarget.pause();
     videoZoomTarget.style.display = 'none';
@@ -161,6 +197,10 @@ function openImageZoom(image) {
  * @param {HTMLElement} button - Gallery control with a data-gallery-video source.
  */
 function openVideoZoom(button) {
+    if (!imageZoomModal || !imageZoomTarget || !videoZoomTarget || !imageZoomCaption) {
+        return;
+    }
+
     const caption = button.dataset.galleryTitle || 'Real-time image series (1/second) of heat-activated drug delivery (doxorubicin)';
     imageZoomTarget.style.display = 'none';
     imageZoomTarget.removeAttribute('src');
@@ -177,6 +217,10 @@ function openVideoZoom(button) {
 
 /** Resets and closes the media zoom modal. */
 function closeImageZoom() {
+    if (!imageZoomModal || !imageZoomTarget || !videoZoomTarget || !imageZoomCaption) {
+        return;
+    }
+
     imageZoomModal.classList.remove('is-open');
     imageZoomModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
@@ -460,30 +504,34 @@ footerGalleryVideos.forEach((button, index) => {
     });
 });
 
-imageZoomModal.addEventListener('wheel', (event) => {
-    if (!imageZoomModal.classList.contains('is-open')) {
-        return;
-    }
-    event.preventDefault();
-    const rect = imageZoomTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / Math.max(1, rect.width)) * 100;
-    const y = ((event.clientY - rect.top) / Math.max(1, rect.height)) * 100;
-    const currentScale = Number(imageZoomTarget.dataset.zoomScale || '1');
-    const nextScale = event.deltaY < 0
-        ? Math.min(2.4, currentScale + 0.18)
-        : Math.max(1, currentScale - 0.18);
-    imageZoomTarget.dataset.zoomScale = String(nextScale);
-    imageZoomTarget.style.transformOrigin = `${x}% ${y}%`;
-    imageZoomTarget.style.transform = `scale(${nextScale})`;
-}, { passive: false });
+if (imageZoomModal && imageZoomTarget) {
+    imageZoomModal.addEventListener('wheel', (event) => {
+        if (!imageZoomModal.classList.contains('is-open')) {
+            return;
+        }
+        event.preventDefault();
+        const rect = imageZoomTarget.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / Math.max(1, rect.width)) * 100;
+        const y = ((event.clientY - rect.top) / Math.max(1, rect.height)) * 100;
+        const currentScale = Number(imageZoomTarget.dataset.zoomScale || '1');
+        const nextScale = event.deltaY < 0
+            ? Math.min(2.4, currentScale + 0.18)
+            : Math.max(1, currentScale - 0.18);
+        imageZoomTarget.dataset.zoomScale = String(nextScale);
+        imageZoomTarget.style.transformOrigin = `${x}% ${y}%`;
+        imageZoomTarget.style.transform = `scale(${nextScale})`;
+    }, { passive: false });
+}
 
-videoZoomTarget.addEventListener('click', () => {
-    if (videoZoomTarget.paused) {
-        videoZoomTarget.play();
-    } else {
-        videoZoomTarget.pause();
-    }
-});
+if (videoZoomTarget) {
+    videoZoomTarget.addEventListener('click', () => {
+        if (videoZoomTarget.paused) {
+            videoZoomTarget.play();
+        } else {
+            videoZoomTarget.pause();
+        }
+    });
+}
 
 galleryScrollButtons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -601,54 +649,64 @@ handleEmailFormSubmit(contactForm, 'contact_us');
 handleEmailFormSubmit(betaAccessForm, 'pioneer_program_early_access');
 handleFormspreeSubmit(quoteForm, 'request_quote');
 
-betaModal.addEventListener('click', (event) => {
-    if (event.target === betaModal) {
-        closeBetaModal();
-    }
-});
+if (betaModal) {
+    betaModal.addEventListener('click', (event) => {
+        if (event.target === betaModal) {
+            closeBetaModal();
+        }
+    });
+}
 
-betaFormModal.addEventListener('click', (event) => {
-    if (event.target === betaFormModal) {
-        closeBetaFormModal();
-    }
-});
+if (betaFormModal) {
+    betaFormModal.addEventListener('click', (event) => {
+        if (event.target === betaFormModal) {
+            closeBetaFormModal();
+        }
+    });
+}
 
-quoteModal.addEventListener('click', (event) => {
-    if (event.target === quoteModal) {
-        closeQuoteModal();
-    }
-});
+if (quoteModal) {
+    quoteModal.addEventListener('click', (event) => {
+        if (event.target === quoteModal) {
+            closeQuoteModal();
+        }
+    });
+}
 
-testimonialsModal.addEventListener('click', (event) => {
-    if (event.target === testimonialsModal) {
-        closeTestimonialsModal();
-    }
-});
+if (testimonialsModal) {
+    testimonialsModal.addEventListener('click', (event) => {
+        if (event.target === testimonialsModal) {
+            closeTestimonialsModal();
+        }
+    });
+}
 
-imageZoomModal.addEventListener('click', (event) => {
-    if (event.target === imageZoomModal) {
-        closeImageZoom();
-    }
-});
+if (imageZoomModal) {
+    imageZoomModal.addEventListener('click', (event) => {
+        if (event.target === imageZoomModal) {
+            closeImageZoom();
+        }
+    });
+}
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && betaModal.classList.contains('is-open')) {
+    if (event.key === 'Escape' && betaModal?.classList.contains('is-open')) {
         closeBetaModal();
     }
 
-    if (event.key === 'Escape' && betaFormModal.classList.contains('is-open')) {
+    if (event.key === 'Escape' && betaFormModal?.classList.contains('is-open')) {
         closeBetaFormModal();
     }
 
-    if (event.key === 'Escape' && quoteModal.classList.contains('is-open')) {
+    if (event.key === 'Escape' && quoteModal?.classList.contains('is-open')) {
         closeQuoteModal();
     }
 
-    if (event.key === 'Escape' && testimonialsModal.classList.contains('is-open')) {
+    if (event.key === 'Escape' && testimonialsModal?.classList.contains('is-open')) {
         closeTestimonialsModal();
     }
 
-    if (event.key === 'Escape' && imageZoomModal.classList.contains('is-open')) {
+    if (event.key === 'Escape' && imageZoomModal?.classList.contains('is-open')) {
         closeImageZoom();
     }
 });
