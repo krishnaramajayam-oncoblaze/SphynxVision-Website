@@ -2,13 +2,15 @@
 
 /**
  * Interactive behavior for the SphynxVision landing page.
- * Handles navigation, modals, image/video zooming, gallery controls, and mailto forms.
+ * Handles navigation, modals, image/video zooming, gallery controls, mailto contact, and Formspree quote requests.
  */
 
 const betaModal = document.getElementById('betaModal');
 const betaFormModal = document.getElementById('betaFormModal');
+const quoteModal = document.getElementById('quoteModal');
 const contactForm = document.getElementById('contactForm');
 const betaAccessForm = document.getElementById('betaAccessForm');
+const quoteForm = document.getElementById('quoteForm');
 const testimonialsModal = document.getElementById('testimonialsModal');
 const navbar = document.querySelector('.navbar');
 const imageZoomModal = document.getElementById('imageZoomModal');
@@ -25,6 +27,8 @@ const openBetaModalButtons = document.querySelectorAll('[data-open-beta-modal]')
 const closeBetaModalButtons = document.querySelectorAll('[data-close-beta-modal]');
 const openBetaFormModalButtons = document.querySelectorAll('[data-open-beta-form-modal]');
 const closeBetaFormModalButtons = document.querySelectorAll('[data-close-beta-form-modal]');
+const openQuoteModalButtons = document.querySelectorAll('[data-open-quote-modal]');
+const closeQuoteModalButtons = document.querySelectorAll('[data-close-quote-modal]');
 const openTestimonialsModalButtons = document.querySelectorAll('[data-open-testimonials-modal]');
 const closeTestimonialsModalButtons = document.querySelectorAll('[data-close-testimonials-modal]');
 const zoomImageButtons = document.querySelectorAll('[data-zoom-image]');
@@ -92,6 +96,21 @@ function openBetaFormModal() {
 function closeBetaFormModal() {
     betaFormModal.classList.remove('is-open');
     betaFormModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+}
+
+/** Opens the quote request form modal. */
+function openQuoteModal() {
+    quoteModal.classList.add('is-open');
+    quoteModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    quoteForm.querySelector('input').focus();
+}
+
+/** Closes the quote request form modal. */
+function closeQuoteModal() {
+    quoteModal.classList.remove('is-open');
+    quoteModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
 }
 
@@ -250,6 +269,14 @@ openBetaFormModalButtons.forEach((button) => {
 
 closeBetaFormModalButtons.forEach((button) => {
     button.addEventListener('click', closeBetaFormModal);
+});
+
+openQuoteModalButtons.forEach((button) => {
+    button.addEventListener('click', openQuoteModal);
+});
+
+closeQuoteModalButtons.forEach((button) => {
+    button.addEventListener('click', closeQuoteModal);
 });
 
 openTestimonialsModalButtons.forEach((button) => {
@@ -507,6 +534,10 @@ function setFormStatus(form, message, state) {
  * @param {string} formName - Analytics form identifier.
  */
 function handleEmailFormSubmit(form, formName) {
+    if (!form) {
+        return;
+    }
+
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         trackFormSubmit(formName);
@@ -528,8 +559,47 @@ function handleEmailFormSubmit(form, formName) {
     });
 }
 
+/**
+ * Submits a form to Formspree without navigating away from the page.
+ * @param {HTMLFormElement} form - Form to enhance.
+ * @param {string} formName - Analytics form identifier.
+ */
+function handleFormspreeSubmit(form, formName) {
+    if (!form) {
+        return;
+    }
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        trackFormSubmit(formName);
+        setFormStatus(form, 'Submitting your request...', null);
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: form.method || 'POST',
+                body: formData,
+                headers: {
+                    Accept: 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Form submission failed');
+            }
+
+            form.reset();
+            setFormStatus(form, '', null);
+        } catch (error) {
+            setFormStatus(form, 'We could not send the form. Please email haemmerich@oncoblaze.com directly.', 'error');
+        }
+    });
+}
+
 handleEmailFormSubmit(contactForm, 'contact_us');
 handleEmailFormSubmit(betaAccessForm, 'pioneer_program_early_access');
+handleFormspreeSubmit(quoteForm, 'request_quote');
 
 betaModal.addEventListener('click', (event) => {
     if (event.target === betaModal) {
@@ -540,6 +610,12 @@ betaModal.addEventListener('click', (event) => {
 betaFormModal.addEventListener('click', (event) => {
     if (event.target === betaFormModal) {
         closeBetaFormModal();
+    }
+});
+
+quoteModal.addEventListener('click', (event) => {
+    if (event.target === quoteModal) {
+        closeQuoteModal();
     }
 });
 
@@ -562,6 +638,10 @@ document.addEventListener('keydown', (event) => {
 
     if (event.key === 'Escape' && betaFormModal.classList.contains('is-open')) {
         closeBetaFormModal();
+    }
+
+    if (event.key === 'Escape' && quoteModal.classList.contains('is-open')) {
+        closeQuoteModal();
     }
 
     if (event.key === 'Escape' && testimonialsModal.classList.contains('is-open')) {
